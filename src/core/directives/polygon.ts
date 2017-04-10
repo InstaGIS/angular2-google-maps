@@ -224,7 +224,7 @@ export class AgmPolygon implements OnDestroy, OnChanges, AfterContentInit {
     }
 
     this._polygonManager.setPolygonOptions(this, this._updatePolygonOptions(changes));
-    this.pathChanged.emit(this.getPolygonPoints());
+    this.pathChanged.emit(this.getPolygonPath());
   }
 
   getPolygonPath(): Promise<Array<any>> {
