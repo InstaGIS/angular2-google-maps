@@ -28,19 +28,38 @@ export class PolygonManager {
       visible: path.visible,
       zIndex: path.zIndex,
     });
+    //console.log(polygonPromise)
     this._polygons.set(path, polygonPromise);
   }
+
+  // getPolygonArray(): Array {
+  // //  return
+  // }
+  //
+  // getPath(): Polygon {
+  //
+  // }
 
   updatePolygon(polygon: AgmPolygon): Promise<void> {
     const m = this._polygons.get(polygon);
     if (m == null) {
+    //console.log(this._polygons);
+    // console.log(this._polygons);
       return Promise.resolve();
     }
+    //console.log(m);
     return m.then((l: Polygon) => this._zone.run(() => { l.setPaths(polygon.paths); }));
   }
 
   setPolygonOptions(path: AgmPolygon, options: {[propName: string]: any}): Promise<void> {
     return this._polygons.get(path).then((l: Polygon) => { l.setOptions(options); });
+  }
+
+  getPolygonPoints(): Promise<Array<any>> {
+    // get the first path's coordinates as array
+    return this._polygons.values().next().value.then((polygon: any) => {
+      return polygon.getPath().getArray();
+    });
   }
 
   deletePolygon(paths: AgmPolygon): Promise<void> {
