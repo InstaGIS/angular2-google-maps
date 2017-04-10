@@ -227,8 +227,8 @@ export class AgmPolygon implements OnDestroy, OnChanges, AfterContentInit {
     this.pathChanged.emit(this.getPolygonPoints());
   }
 
-  getPolygonPoints(): Promise<Array<any>> {
-    return this._polygonManager.getPolygonPoints();
+  getPolygonPath(): Promise<Array<any>> {
+    return this._polygonManager.getPolygonPath();
   }
 
   private _init() {
@@ -256,7 +256,7 @@ export class AgmPolygon implements OnDestroy, OnChanges, AfterContentInit {
       this._subscriptions.push(os);
     });
 
-    const os = this._polygonManager.createEventObservable('mouseup', this).subscribe((ev: Promise<Array<any>>) => this.pathChanged.emit(this.getPolygonPoints()));
+    const os = this._polygonManager.createEventObservable('mouseup', this).subscribe((ev: Promise<Array<any>>) => this.pathChanged.emit(this.getPolygonPath()));
     this._subscriptions.push(os);
   }
 
@@ -275,7 +275,7 @@ export class AgmPolygon implements OnDestroy, OnChanges, AfterContentInit {
   /** @internal */
   ngOnDestroy() {
     this._polygonManager.deletePolygon(this);
-    this.pathChanged.emit(this.getPolygonPoints());
+    this.pathChanged.emit(this.getPolygonPath());
     // unsubscribe all registered observable subscriptions
     this._subscriptions.forEach((s) => s.unsubscribe());
   }
