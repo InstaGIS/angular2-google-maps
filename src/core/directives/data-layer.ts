@@ -25,8 +25,8 @@ let layerId = 0;
  * `],
  *  template: `
  * <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
- * 	  <agm-data-layer [geoJson]="geoJsonObject" (layerClick)="clicked($event)" [style]="styleFunc">
- * 	  </agm-data-layer>
+ *    <agm-data-layer [geoJson]="geoJsonObject" (layerClick)="clicked($event)" [style]="styleFunc">
+ *    </agm-data-layer>
  * </agm-map>
  *  `
  * })
@@ -199,7 +199,7 @@ let layerId = 0;
 @Directive({
   selector: 'agm-data-layer',
   inputs: ['geoJson', 'style'],
-  outputs: ['layerClick']
+  outputs: ['layerClick','mouseOver','mouseOut']
 })
 export class AgmDataLayer implements OnInit, OnDestroy, OnChanges {
   private static _dataOptionsAttributes: Array<string> = ['style'];
@@ -212,6 +212,8 @@ export class AgmDataLayer implements OnInit, OnDestroy, OnChanges {
    * This event is fired when a feature in the layer is clicked.
    */
   layerClick: EventEmitter<DataMouseEvent> = new EventEmitter<DataMouseEvent>();
+  mouseOver: EventEmitter<DataMouseEvent> = new EventEmitter<DataMouseEvent>();
+  mouseOut: EventEmitter<DataMouseEvent> = new EventEmitter<DataMouseEvent>();
 
   /**
    * The geoJson to be displayed
@@ -237,6 +239,8 @@ export class AgmDataLayer implements OnInit, OnDestroy, OnChanges {
   private _addEventListeners() {
     const listeners = [
       { name: 'click', handler: (ev: DataMouseEvent) => this.layerClick.emit(ev) },
+      { name: 'mouseover', handler: (ev: DataMouseEvent) => this.mouseOver.emit(ev) },
+      { name: 'mouseout', handler: (ev: DataMouseEvent) => this.mouseOut.emit(ev) },
     ];
     listeners.forEach((obj) => {
       const os = this._manager.createEventObservable(obj.name, this).subscribe(obj.handler);
